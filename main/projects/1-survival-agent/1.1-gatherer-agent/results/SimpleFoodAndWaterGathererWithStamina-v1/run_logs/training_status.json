@@ -1,0 +1,110 @@
+{
+    "SimpleFoodAndWaterGathererWithStamina": {
+        "checkpoints": [
+            {
+                "steps": 1000180,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-1000180.onnx",
+                "reward": null,
+                "creation_time": 1751886450.0768979,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-1000180.pt"
+                ]
+            },
+            {
+                "steps": 1499952,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-1499952.onnx",
+                "reward": -75.74970073699951,
+                "creation_time": 1751886911.091256,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-1499952.pt"
+                ]
+            },
+            {
+                "steps": 1999961,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-1999961.onnx",
+                "reward": null,
+                "creation_time": 1751887137.132707,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-1999961.pt"
+                ]
+            },
+            {
+                "steps": 2499982,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-2499982.onnx",
+                "reward": -70.50117290019989,
+                "creation_time": 1751887393.1185136,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-2499982.pt"
+                ]
+            },
+            {
+                "steps": 2999952,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-2999952.onnx",
+                "reward": -70.65575165407998,
+                "creation_time": 1751887630.87642,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-2999952.pt"
+                ]
+            },
+            {
+                "steps": 3499953,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-3499953.onnx",
+                "reward": -65.49735588828723,
+                "creation_time": 1751887866.845823,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-3499953.pt"
+                ]
+            },
+            {
+                "steps": 3999995,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-3999995.onnx",
+                "reward": -70.86029005050659,
+                "creation_time": 1751888104.9192266,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-3999995.pt"
+                ]
+            },
+            {
+                "steps": 4499975,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-4499975.onnx",
+                "reward": -66.14438011248906,
+                "creation_time": 1751888404.6577165,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-4499975.pt"
+                ]
+            },
+            {
+                "steps": 4999964,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-4999964.onnx",
+                "reward": -70.33047732710838,
+                "creation_time": 1751888668.3093405,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-4999964.pt"
+                ]
+            },
+            {
+                "steps": 5000156,
+                "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-5000156.onnx",
+                "reward": -70.33047732710838,
+                "creation_time": 1751888668.35296,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-5000156.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5000156,
+            "file_path": "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina.onnx",
+            "reward": -70.33047732710838,
+            "creation_time": 1751888668.35296,
+            "auxillary_file_paths": [
+                "results\\SimpleFoodAndWaterGathererWithStamina-v1\\SimpleFoodAndWaterGathererWithStamina\\SimpleFoodAndWaterGathererWithStamina-5000156.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

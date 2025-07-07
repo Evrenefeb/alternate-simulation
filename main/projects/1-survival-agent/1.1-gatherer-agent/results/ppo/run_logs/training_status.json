@@ -1,0 +1,65 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 83225,
+                "file_path": "results\\ppo\\My Behavior\\My Behavior-83225.onnx",
+                "reward": null,
+                "creation_time": 1751550970.9143662,
+                "auxillary_file_paths": [
+                    "results\\ppo\\My Behavior\\My Behavior-83225.pt"
+                ]
+            },
+            {
+                "steps": 102248,
+                "file_path": "results\\ppo\\My Behavior\\My Behavior-102248.onnx",
+                "reward": 0.0,
+                "creation_time": 1751551249.2059233,
+                "auxillary_file_paths": [
+                    "results\\ppo\\My Behavior\\My Behavior-102248.pt"
+                ]
+            },
+            {
+                "steps": 123156,
+                "file_path": "results\\ppo\\My Behavior\\My Behavior-123156.onnx",
+                "reward": null,
+                "creation_time": 1751551406.3085277,
+                "auxillary_file_paths": [
+                    "results\\ppo\\My Behavior\\My Behavior-123156.pt"
+                ]
+            },
+            {
+                "steps": 127307,
+                "file_path": "results\\ppo\\My Behavior\\My Behavior-127307.onnx",
+                "reward": 0.25,
+                "creation_time": 1751561292.9917607,
+                "auxillary_file_paths": [
+                    "results\\ppo\\My Behavior\\My Behavior-127307.pt"
+                ]
+            },
+            {
+                "steps": 131099,
+                "file_path": "results\\ppo\\My Behavior\\My Behavior-131099.onnx",
+                "reward": 4.916666666666667,
+                "creation_time": 1751561398.077279,
+                "auxillary_file_paths": [
+                    "results\\ppo\\My Behavior\\My Behavior-131099.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 131099,
+            "file_path": "results\\ppo\\My Behavior.onnx",
+            "reward": 4.916666666666667,
+            "creation_time": 1751561398.077279,
+            "auxillary_file_paths": [
+                "results\\ppo\\My Behavior\\My Behavior-131099.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

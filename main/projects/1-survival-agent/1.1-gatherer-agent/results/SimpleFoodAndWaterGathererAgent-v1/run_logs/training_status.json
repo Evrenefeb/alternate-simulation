@@ -1,0 +1,38 @@
+{
+    "SimpleFoodAndWaterGatherer": {
+        "checkpoints": [
+            {
+                "steps": 499998,
+                "file_path": "results\\SimpleFoodAndWaterGathererAgent-v1\\SimpleFoodAndWaterGatherer\\SimpleFoodAndWaterGatherer-499998.onnx",
+                "reward": -9.489773144324621,
+                "creation_time": 1751644857.0157666,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererAgent-v1\\SimpleFoodAndWaterGatherer\\SimpleFoodAndWaterGatherer-499998.pt"
+                ]
+            },
+            {
+                "steps": 500574,
+                "file_path": "results\\SimpleFoodAndWaterGathererAgent-v1\\SimpleFoodAndWaterGatherer\\SimpleFoodAndWaterGatherer-500574.onnx",
+                "reward": -9.489773144324621,
+                "creation_time": 1751644857.0653334,
+                "auxillary_file_paths": [
+                    "results\\SimpleFoodAndWaterGathererAgent-v1\\SimpleFoodAndWaterGatherer\\SimpleFoodAndWaterGatherer-500574.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500574,
+            "file_path": "results\\SimpleFoodAndWaterGathererAgent-v1\\SimpleFoodAndWaterGatherer.onnx",
+            "reward": -9.489773144324621,
+            "creation_time": 1751644857.0653334,
+            "auxillary_file_paths": [
+                "results\\SimpleFoodAndWaterGathererAgent-v1\\SimpleFoodAndWaterGatherer\\SimpleFoodAndWaterGatherer-500574.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
