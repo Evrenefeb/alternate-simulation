@@ -82,4 +82,8 @@ public class Food
         }
     }
 
+    public float GetPercentRatio() {
+        return CurrentFood / MaxFood;
+    }
+
 }

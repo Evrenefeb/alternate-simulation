@@ -84,4 +84,8 @@ public class Health {
             }
         }
     }
+
+    public float GetPercentRatio() {
+        return CurrentHealth / MaxHealth;
+    }
 }

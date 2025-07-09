@@ -80,5 +80,8 @@ public class Water
             }
         }
     }
+    public float GetPercentRatio() {
+        return CurrentWater / MaxWater;
+    }
 
 }

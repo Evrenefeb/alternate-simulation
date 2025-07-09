@@ -5,7 +5,7 @@ public class AgentStatDisplayer : MonoBehaviour {
     public Transform lookAtLoc;
     private Transform localTransform;
 
-    private AgentStats agentStats;
+    private AdvancedFoodAndWaterGathererAgent agentStats;
 
     [SerializeField] private TMP_Text txt_Health;
     [SerializeField] private TMP_Text txt_Food;
@@ -13,7 +13,7 @@ public class AgentStatDisplayer : MonoBehaviour {
 
     private void Start() {
         localTransform = GetComponent<Transform>();
-        agentStats = GetComponentInParent<AgentStats>();
+        agentStats = GetComponentInParent<AdvancedFoodAndWaterGathererAgent>();        
     }
 
     private void Update() {
