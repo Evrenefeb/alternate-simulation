@@ -27,6 +27,12 @@ public class AdvancedFoodAndWaterGathererAgent : Agent
     public float movementSpeed;
     public float rotationSpeed;
 
+    // Consumable Logic
+
+    [SerializeField] private IConsumable currentConsumable;
+    [SerializeField] private bool isBiting;
+    
+
     // Components
 
     public Health Health { get; private set; }
@@ -56,6 +62,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent
         }
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         isAlive = true;
+        isBiting = false;
     }
 
     public override void OnEpisodeBegin() {
@@ -64,23 +71,32 @@ public class AdvancedFoodAndWaterGathererAgent : Agent
         Water.SetWater(initialMaxWater);
 
         depletionTimer = 0f;
+        isAlive = true;
+        isBiting = false;
     }
 
     public override void CollectObservations(VectorSensor sensor) {
         sensor.AddObservation(Health.GetPercentRatio());
         sensor.AddObservation(Food.GetPercentRatio());
         sensor.AddObservation(Water.GetPercentRatio());
+
+        // Flag
+        sensor.AddObservation(isBiting ? 1f : 0f);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
         Movement(actions);
-        DepleteVitals();        
+        DepleteVitals();
+        AgentTryConsume(actions);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut) {
         var continuousActions = actionsOut.ContinuousActions;
         continuousActions[0] = Input.GetAxisRaw("Vertical");
         continuousActions[1] = Input.GetKey(KeyCode.Q) ? -1f : Input.GetKey(KeyCode.E) ? 1f : 0f;
+
+        var discreteActions = actionsOut.DiscreteActions;
+        discreteActions[0] = Input.GetKey(KeyCode.F) ? 1 : 0;
     }
 
     // Private Methods
@@ -93,15 +109,15 @@ public class AdvancedFoodAndWaterGathererAgent : Agent
         depletionTimer += Time.deltaTime;
 
         if(depletionTimer >= 1f) {
-            Food.ChangeFood(foodDepletionRate);
-            Water.ChangeWater(waterDepletionRate);
+            Food.ChangeFood(-foodDepletionRate);
+            Water.ChangeWater(-waterDepletionRate);
 
             depletionTimer = 0f;
 
             if(Food.IsEmpty || Water.IsEmpty) {
 
                 if (Health.IsAlive) {
-                    Health.ApplyDamage(healthDepletionRate);
+                    Health.ApplyDamage(-healthDepletionRate);
                 }
                 else {
                     // Agent Died
@@ -123,5 +139,38 @@ public class AdvancedFoodAndWaterGathererAgent : Agent
 
         transform.Rotate(0f, rotate * rotationSpeed * Time.deltaTime, 0f);
     }
-    
+
+    private void AgentTryConsume(ActionBuffers actions) {
+        if (actions.DiscreteActions[0] == 1) {
+            isBiting = true;
+            if (currentConsumable != null) {
+                // Consume Successfully
+                currentConsumable.Consume(this);
+                //AddReward(+)
+            }
+            else {
+                // Consume Unsuccessfully
+
+                //AddReward(+)
+            }
+        }
+        isBiting = false;
+
+    }
+
+    // Collision Handling
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.TryGetComponent<IConsumable>(out IConsumable consumable)) {
+            currentConsumable = consumable;
+        }
+    }
+
+    private void OnTriggerStay(Collider other) {
+        if (other.gameObject.TryGetComponent<IConsumable>(out IConsumable consumable)) {
+            if(currentConsumable == consumable) {
+                currentConsumable = null;
+            }
+        }
+    }
 }

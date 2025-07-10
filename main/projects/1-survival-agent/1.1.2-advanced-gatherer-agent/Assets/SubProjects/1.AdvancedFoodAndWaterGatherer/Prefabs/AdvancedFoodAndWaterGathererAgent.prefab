@@ -764,6 +764,7 @@ GameObject:
   - component: {fileID: 5386218329833284699}
   - component: {fileID: 4431398693184976862}
   - component: {fileID: 5074188777269551697}
+  - component: {fileID: 6964134403278293946}
   m_Layer: 0
   m_Name: AdvancedFoodAndWaterGathererAgent
   m_TagString: Untagged
@@ -829,12 +830,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
+    VectorObservationSize: 4
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
-      BranchSizes: 
-    VectorActionSize: 02000000
+      BranchSizes: 02000000
+    VectorActionSize: 
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
@@ -875,6 +876,7 @@ MonoBehaviour:
   waterPercentThreshold: 0.8
   movementSpeed: 5
   rotationSpeed: 100
+  isBiting: 0
 --- !u!114 &5074188777269551697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,3 +892,26 @@ MonoBehaviour:
   DecisionPeriod: 5
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!136 &6964134403278293946
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604979395082812796}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: -1, y: 0, z: 0}
