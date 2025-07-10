@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 8174070872213325797}
   m_Layer: 0
   m_Name: Campfire
-  m_TagString: Untagged
+  m_TagString: Tag_Campfire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

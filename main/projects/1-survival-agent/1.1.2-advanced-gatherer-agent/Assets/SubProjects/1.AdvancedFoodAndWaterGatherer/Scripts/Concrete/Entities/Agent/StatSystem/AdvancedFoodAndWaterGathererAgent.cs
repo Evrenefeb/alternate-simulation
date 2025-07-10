@@ -4,173 +4,230 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
-public class AdvancedFoodAndWaterGathererAgent : Agent
-{
+public class AdvancedFoodAndWaterGathererAgent : Agent {
     // Properties
     [Header("Initial Stats")]
-    public float initialMaxHealth;
-    public float initialMaxFood;
-    public float initialMaxWater;
-    public bool isAlive;
+    public float initialMaxHealth = 100f;
+    public float initialMaxFood = 100f;
+    public float initialMaxWater = 100f;
+    public bool isAlive = true;
 
     [Header("Depletion Rates")]
-    public float healthDepletionRate;
-    public float foodDepletionRate;
-    public float waterDepletionRate;
+    public float healthDepletionRate = 10f;
+    public float foodDepletionRate = 5f;
+    public float waterDepletionRate = 5f;
 
     [Header("Health Regen")]
-    public float healthRegenRate;
-    public float foodPercentThreshold;
-    public float waterPercentThreshold;
+    public float healthRegenRate = 2f;
+    public float foodPercentThreshold = 0.5f;
+    public float waterPercentThreshold = 0.5f;
 
     [Header("Movement")]
-    public float movementSpeed;
-    public float rotationSpeed;
+    public float movementSpeed = 5f;
+    public float rotationSpeed = 100f;
 
     // Consumable Logic
-
     [SerializeField] private IConsumable currentConsumable;
     [SerializeField] private bool isBiting;
-    
 
     // Components
-
     public Health Health { get; private set; }
     public Food Food { get; private set; }
-    public Water Water { get; private set; }  
-    
+    public Water Water { get; private set; }
+
     private Rigidbody rb;
 
     // Timers
-
-    protected float depletionTimer;
+    [SerializeField] private float depletionTimer;
 
     // Events
-
     public event Action OnEpisodeEnd;
 
-    // Overriden Methods
-
+    // Overridden Methods
     public override void Initialize() {
+        // Initialize vital stats
         Health = new Health(initialMaxHealth);
         Food = new Food(initialMaxFood);
-        Water = new Water(initialMaxWater);   
-        
+        Water = new Water(initialMaxWater);
+
+        // Setup rigidbody
         rb = GetComponent<Rigidbody>();
         if (rb == null) {
             rb = gameObject.AddComponent<Rigidbody>();
         }
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        // Initialize state
         isAlive = true;
         isBiting = false;
+        depletionTimer = 0f;
+
+        Debug.Log($"Agent Initialized - Health: {Health.CurrentHealth}, Food: {Food.CurrentFood}, Water: {Water.CurrentWater}");
     }
 
     public override void OnEpisodeBegin() {
+        // Reset all vital stats to maximum
         Health.SetHealth(initialMaxHealth);
         Food.SetFood(initialMaxFood);
         Water.SetWater(initialMaxWater);
 
+        // Reset timers and state
         depletionTimer = 0f;
         isAlive = true;
         isBiting = false;
+        currentConsumable = null;
+
+        // Reset physics
+        if (rb != null) {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        Debug.Log($"Episode Begin - Health: {Health.CurrentHealth}, Food: {Food.CurrentFood}, Water: {Water.CurrentWater}");
     }
 
     public override void CollectObservations(VectorSensor sensor) {
+        // Add vital stats as observations
         sensor.AddObservation(Health.GetPercentRatio());
         sensor.AddObservation(Food.GetPercentRatio());
         sensor.AddObservation(Water.GetPercentRatio());
 
-        // Flag
+        // Add action states
         sensor.AddObservation(isBiting ? 1f : 0f);
+        sensor.AddObservation(currentConsumable != null ? 1f : 0f);
+
+        // Add position for spatial awareness
+        sensor.AddObservation(transform.localPosition.x);
+        sensor.AddObservation(transform.localPosition.z);
+        sensor.AddObservation(transform.rotation.y);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
+        if (!isAlive) return;
+
+        Debug.Log("ONACTIONRECIVED");
+        // Process actions
         Movement(actions);
-        DepleteVitals();
         AgentTryConsume(actions);
+
+        // Update vital systems
+       //DepleteVitals();
+
+        // Check death condition
+        CheckDeathCondition();
+
+        // Small penalty for time to encourage efficiency
+        AddReward(-0.001f);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut) {
         var continuousActions = actionsOut.ContinuousActions;
-        continuousActions[0] = Input.GetAxisRaw("Vertical");
-        continuousActions[1] = Input.GetKey(KeyCode.Q) ? -1f : Input.GetKey(KeyCode.E) ? 1f : 0f;
+        continuousActions[0] = Input.GetAxisRaw("Vertical");     // Forward/backward
+        continuousActions[1] = Input.GetAxisRaw("Horizontal");   // Rotation
 
         var discreteActions = actionsOut.DiscreteActions;
-        discreteActions[0] = Input.GetKey(KeyCode.F) ? 1 : 0;
+        discreteActions[0] = Input.GetKey(KeyCode.F) ? 1 : 0;    // Bite action
     }
 
     // Private Methods
-    
     private void DepleteVitals() {
-        if(Health == null || Food == null || Water == null) {
+        if (Health == null || Food == null || Water == null) {
+            Debug.LogError("One or more vital stats are null!");
             return;
         }
 
-        depletionTimer += Time.deltaTime;
+        
 
-        if(depletionTimer >= 1f) {
+        // Deplete resources every second
+        if (depletionTimer >= 1f) {
+            // Deplete food and water
             Food.ChangeFood(-foodDepletionRate);
             Water.ChangeWater(-waterDepletionRate);
 
-            depletionTimer = 0f;
+            Debug.Log($"Depleting - Food: {Food.CurrentFood}, Water: {Water.CurrentWater}");
 
-            if(Food.IsEmpty || Water.IsEmpty) {
-
+            // Handle health logic
+            if (Food.IsEmpty || Water.IsEmpty) {
                 if (Health.IsAlive) {
-                    Health.ApplyDamage(-healthDepletionRate);
+                    Health.ApplyDamage(healthDepletionRate);
+                    AddReward(-0.5f); // Penalty for letting vitals get too low
+                    Debug.Log($"Taking damage! Health: {Health.CurrentHealth}");
                 }
-                else {
-                    // Agent Died
-                }
-
-
-            }else if (Food.GetPercentRatio() >= foodPercentThreshold && Water.GetPercentRatio() >= waterPercentThreshold) {
-                Health.AddHealth(healthRegenRate);
             }
-        }               
+            else if (Food.GetPercentRatio() >= foodPercentThreshold && Water.GetPercentRatio() >= waterPercentThreshold) {
+                Health.AddHealth(healthRegenRate);
+                AddReward(0.1f); // Small reward for maintaining good health
+                Debug.Log($"Regenerating health! Health: {Health.CurrentHealth}");
+            }
+
+            depletionTimer = 0f;
+        }
     }
 
     private void Movement(ActionBuffers actions) {
-        float moveX = actions.ContinuousActions[0];
+        float moveZ = actions.ContinuousActions[0];
         float rotate = actions.ContinuousActions[1];
 
-        Vector3 move = transform.TransformDirection(new Vector3(moveX, 0f, 0f));
-        rb.linearVelocity = move * movementSpeed;
+        // Apply movement
+        Vector3 move = transform.TransformDirection(new Vector3(0f, 0f, moveZ));
+        rb.linearVelocity = new Vector3(move.x * movementSpeed, rb.linearVelocity.y, move.z * movementSpeed);
 
+        // Apply rotation
         transform.Rotate(0f, rotate * rotationSpeed * Time.deltaTime, 0f);
     }
 
     private void AgentTryConsume(ActionBuffers actions) {
-        if (actions.DiscreteActions[0] == 1) {
-            isBiting = true;
-            if (currentConsumable != null) {
-                // Consume Successfully
-                currentConsumable.Consume(this);
-                //AddReward(+)
-            }
-            else {
-                // Consume Unsuccessfully
-
-                //AddReward(+)
-            }
-        }
         isBiting = false;
 
+        if (actions.DiscreteActions[0] == 1) {
+            isBiting = true;
+            Debug.Log("Agent is biting!");
+
+            if (currentConsumable != null) {
+                Debug.Log($"Consuming: {currentConsumable.GetType().Name}");
+                currentConsumable.Consume(this);
+                AddReward(1f); // Reward for successful consumption
+            }
+            else {
+                Debug.Log("Biting but no consumable nearby");
+                AddReward(-0.1f); // Small penalty for wasted action
+            }
+        }
+    }
+
+    private void CheckDeathCondition() {
+        if (!Health.IsAlive && isAlive) {
+            isAlive = false;
+            Debug.Log("Agent died!");
+            AddReward(-10f); // Large penalty for death
+            OnEpisodeEnd?.Invoke();
+            EndEpisode();
+        }
     }
 
     // Collision Handling
-
     private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.TryGetComponent<IConsumable>(out IConsumable consumable)) {
+        if (other.gameObject.TryGetComponent<IConsumable>(out IConsumable consumable)) {
             currentConsumable = consumable;
+            Debug.Log($"Entered trigger with: {consumable.GetType().Name}");
         }
     }
 
-    private void OnTriggerStay(Collider other) {
+    private void OnTriggerExit(Collider other) {
         if (other.gameObject.TryGetComponent<IConsumable>(out IConsumable consumable)) {
-            if(currentConsumable == consumable) {
+            if (currentConsumable == consumable) {
                 currentConsumable = null;
+                Debug.Log($"Exited trigger with: {consumable.GetType().Name}");
             }
         }
     }
+
+    private void FixedUpdate() {
+        depletionTimer += 1;
+        DepleteVitals();
+    }
 }
+
+
+
+    

@@ -10,14 +10,26 @@ public class FoodOrb : ConsumableEntity {
     [SerializeField] private FoodState foodState;
     public float cookedMultiplier;
 
-    [SerializeField] private float cookTimer;
     [SerializeField] private float cookingTime = 30f;
+    [SerializeField] private float initialCookingTime;
+
+    private EnvironmentController environmentController;
+
+    // Materials
+    public Material M_RawFoodOrb;
+    public Material M_CookedFoodOrb;
+    public MeshRenderer SM_FoodOrb;
+
 
     private void Start() {
-        foodState = FoodState.Raw;   
+        initialCookingTime = cookingTime;
+        foodState = FoodState.Raw;
+        SM_FoodOrb.material = M_RawFoodOrb;
     }
 
-    
+    public void SetEnvironmentController(EnvironmentController controller)  {
+        environmentController = controller;
+    }
 
     public override void Consume(AdvancedFoodAndWaterGathererAgent agentStats) {
         if (foodState == FoodState.Cooked) {
@@ -26,6 +38,7 @@ public class FoodOrb : ConsumableEntity {
         else {
             agentStats.Food.ChangeFood(vitalAmount);
         }
+        ResetFoodOrb();
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -53,9 +66,25 @@ public class FoodOrb : ConsumableEntity {
         }
         else {
             foodState = FoodState.Cooked;
+            SM_FoodOrb.material = M_CookedFoodOrb;
         }
     }
     private void Update() { 
         GetCooked();
+    }
+
+    private void ResetFoodOrb() {
+        ResetFoodState();
+
+        this.gameObject.SetActive(false);
+        if(environmentController != null) {
+            environmentController.RespawnFoodOrb(this.gameObject);
+        }
+    }
+
+    private void ResetFoodState() {
+        cookingTime = initialCookingTime;
+        foodState = FoodState.Raw;
+        SM_FoodOrb.material = M_RawFoodOrb;
     }
 }

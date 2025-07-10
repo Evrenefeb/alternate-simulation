@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7337887337958728527}
   - component: {fileID: 759755431974954577}
   - component: {fileID: 8204617641541827241}
-  - component: {fileID: 4167114996582469767}
+  - component: {fileID: 1664771811465118286}
   m_Layer: 0
   m_Name: SM_FoodOrb
   m_TagString: Untagged
@@ -29,8 +29,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.35, y: 0.2, z: 0.35}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9013398018537777117}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1697070610886406904}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &8204617641541827241
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -87,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4167114996582469767
-SphereCollider:
+--- !u!65 &1664771811465118286
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -106,7 +106,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Size: {x: 0.35, y: 0.2, z: 0.35}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8870070236288394662
 GameObject:
@@ -118,11 +118,11 @@ GameObject:
   m_Component:
   - component: {fileID: 9013398018537777117}
   - component: {fileID: 8479189379915937577}
-  - component: {fileID: 3497213371821056138}
   - component: {fileID: 8441241157761499324}
+  - component: {fileID: 8656136719103052501}
   m_Layer: 0
   m_Name: FoodOrb
-  m_TagString: Untagged
+  m_TagString: Tag_FoodOrb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -170,8 +170,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &3497213371821056138
-SphereCollider:
+--- !u!114 &8441241157761499324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8870070236288394662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f82bcd21df0316b499e02a834000e483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vitalAmount: 10
+  foodState: 0
+  cookedMultiplier: 5
+  cookingTime: 5
+  initialCookingTime: 0
+  M_RawFoodOrb: {fileID: 2100000, guid: 5edf59f9f80a6c446b15a8ffa2927707, type: 2}
+  M_CookedFoodOrb: {fileID: 2100000, guid: 7ea06cd9f2e8d8d46b703a77ec51485a, type: 2}
+  SM_FoodOrb: {fileID: 8204617641541827241}
+--- !u!65 &8656136719103052501
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -189,22 +209,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.2
+  m_Size: {x: 0.4, y: 0.3, z: 0.4}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8441241157761499324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8870070236288394662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f82bcd21df0316b499e02a834000e483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vitalAmount: 10
-  foodState: 0
-  cookedMultiplier: 5
-  cookTimer: 0
-  cookingTime: 30

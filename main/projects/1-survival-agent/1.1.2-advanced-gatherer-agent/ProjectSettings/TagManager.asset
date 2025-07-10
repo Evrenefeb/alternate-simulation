@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Tag_Campfire
+  - Tag_FoodOrb
+  - Tag_WaterVolume
+  - Tag_Agent
   layers:
   - Default
   - TransparentFX
@@ -11,7 +15,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Agent
   - 
   - 
   - 

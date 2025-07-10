@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Water
-{
-
+public class Water {
     // Properties
     public UnityAction<float> OnWaterChanged { get; set; }
     public UnityAction OnWaterEmpty { get; set; }
@@ -12,9 +10,9 @@ public class Water
 
     public float MaxWater { get => maxWater; set => maxWater = value; }
 
-    public float CurrentWater { get; set; } = 0.0f;
+    public float CurrentWater { get; private set; } = 0.0f;
 
-    public bool IsFull => CurrentWater > MaxWater;
+    public bool IsFull => CurrentWater >= MaxWater;
     public bool IsEmpty => CurrentWater <= 0.0f;
 
     // Constructors
@@ -28,60 +26,45 @@ public class Water
         SetWater(maxWater);
     }
 
-
     // Public Methods
-    public void SetWater(float food) {
+    public void SetWater(float water) {
         float previousWater = CurrentWater;
+        CurrentWater = Mathf.Clamp(water, 0, MaxWater);
+        float difference = CurrentWater - previousWater;
 
-        CurrentWater = Mathf.Clamp(food, 0, MaxWater);
-
-        float difference = food - previousWater;
-
-        if (difference > 0.0f) {
+        if (Mathf.Abs(difference) > 0.0f) {
             OnWaterChanged?.Invoke(difference);
         }
     }
 
     public void ChangeWater(float amount) {
-        if (amount > 0) {
-            if (IsFull) {
-                return;
-            }
+        float previousWater = CurrentWater;
 
-            float previousWater = CurrentWater;
+        // Apply the change
+        CurrentWater = Mathf.Clamp(CurrentWater + amount, 0, MaxWater);
 
-            CurrentWater += amount;
+        float changeAmount = CurrentWater - previousWater;
 
-            CurrentWater = Mathf.Clamp(CurrentWater, 0, MaxWater);
+        // Only invoke events if there was actually a change
+        if (Mathf.Abs(changeAmount) > 0.0f) {
+            OnWaterChanged?.Invoke(changeAmount);
 
-            float changeAmount = CurrentWater - previousWater;
-
-            if (changeAmount > 0.0f) {
-                OnWaterChanged?.Invoke(changeAmount);
-            }
-        }
-        else {
-            if (IsEmpty) {
-                return;
-            }
-
-            float previousWater = CurrentWater;
-
-            CurrentWater = Mathf.Clamp(CurrentWater + amount, 0, MaxWater);
-
-            float changeAmount = CurrentWater - previousWater;
-
-            if (Mathf.Abs(changeAmount) > 0.0f) {
-                OnWaterChanged?.Invoke(changeAmount);
-
-                if (CurrentWater <= 0.0f) {
-                    OnWaterEmpty?.Invoke();
-                }
+            // Check if we've reached empty after the change
+            if (CurrentWater <= 0.0f) {
+                OnWaterEmpty?.Invoke();
             }
         }
+
+        // Debug logging
+        Debug.Log($"Water Change: {amount} -> Current: {CurrentWater} (was {previousWater})");
     }
+
     public float GetPercentRatio() {
         return CurrentWater / MaxWater;
     }
 
+    // Helper method for debugging
+    public float GetCurrentWater() {
+        return CurrentWater;
+    }
 }
