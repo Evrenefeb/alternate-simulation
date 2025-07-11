@@ -833,7 +833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 8
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -880,6 +880,7 @@ MonoBehaviour:
   movementSpeed: 5
   rotationSpeed: 100
   isBiting: 0
+  depletionTimer: 0
 --- !u!114 &5074188777269551697
 MonoBehaviour:
   m_ObjectHideFlags: 0

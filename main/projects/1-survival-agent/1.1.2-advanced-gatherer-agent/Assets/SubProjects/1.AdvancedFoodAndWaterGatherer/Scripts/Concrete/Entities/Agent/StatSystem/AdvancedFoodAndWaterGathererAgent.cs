@@ -26,9 +26,19 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     public float movementSpeed = 5f;
     public float rotationSpeed = 100f;
 
-    // Consumable Logic
+    [Header("Consume Logic")]
     [SerializeField] private IConsumable currentConsumable;
     [SerializeField] private bool isBiting;
+
+    [Header("Rewarding System")]
+    public RewardingData rewardingData;
+
+
+    [Header("Timers")]
+    [SerializeField] private float depletionTimer;
+
+    // Events
+    public event Action OnEpisodeEnd;
 
     // Components
     public Health Health { get; private set; }
@@ -36,13 +46,6 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     public Water Water { get; private set; }
 
     private Rigidbody rb;
-
-    // Timers
-    [SerializeField] private float depletionTimer;
-
-    // Events
-    public event Action OnEpisodeEnd;
-
     // Overridden Methods
     public override void Initialize() {
         // Initialize vital stats
@@ -117,7 +120,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         CheckDeathCondition();
 
         // Small penalty for time to encourage efficiency
-        AddReward(-0.001f);
+        AddReward(rewardingData.NR_Idle);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut) {
@@ -149,15 +152,16 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
             // Handle health logic
             if (Food.IsEmpty || Water.IsEmpty) {
                 if (Health.IsAlive) {
+                    
                     Health.ApplyDamage(healthDepletionRate);
-                    AddReward(-0.5f); // Penalty for letting vitals get too low
-                    Debug.Log($"Taking damage! Health: {Health.CurrentHealth}");
+                    AddReward(rewardingData.NR_TakeDamage); 
                 }
             }
             else if (Food.GetPercentRatio() >= foodPercentThreshold && Water.GetPercentRatio() >= waterPercentThreshold) {
                 Health.AddHealth(healthRegenRate);
-                AddReward(0.1f); // Small reward for maintaining good health
-                Debug.Log($"Regenerating health! Health: {Health.CurrentHealth}");
+                if (Health.GetPercentRatio() < 1f) {
+                    AddReward(rewardingData.PR_HealthRegenerated);
+                }
             }
 
             depletionTimer = 0f;
@@ -186,11 +190,12 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
             if (currentConsumable != null) {
                 Debug.Log($"Consuming: {currentConsumable.GetType().Name}");
                 currentConsumable.Consume(this);
-                AddReward(1f); // Reward for successful consumption
+                ConsumableEntity consumableEntity = currentConsumable as ConsumableEntity;
+                AddReward((consumableEntity.vitalAmount / 0.01f) * rewardingData.PR_SuccessfulConsumeMultiplier); 
             }
             else {
                 Debug.Log("Biting but no consumable nearby");
-                AddReward(-0.1f); // Small penalty for wasted action
+                AddReward(rewardingData.NR_UnSuccessfulConsumeBase); // Small penalty for wasted action
             }
         }
     }
@@ -199,7 +204,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         if (!Health.IsAlive && isAlive) {
             isAlive = false;
             Debug.Log("Agent died!");
-            AddReward(-10f); // Large penalty for death
+            AddReward(rewardingData.NR_DeathPenalty); // Large penalty for death
             OnEpisodeEnd?.Invoke();
             EndEpisode();
         }
@@ -223,7 +228,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     }
 
     private void FixedUpdate() {
-        depletionTimer += 1;
+        depletionTimer += Time.fixedDeltaTime;
         DepleteVitals();
     }
 }

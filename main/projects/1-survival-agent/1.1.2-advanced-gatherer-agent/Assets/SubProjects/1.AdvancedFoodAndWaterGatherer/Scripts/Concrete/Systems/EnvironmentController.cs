@@ -20,9 +20,17 @@ public class EnvironmentController : MonoBehaviour {
     private float episodeTimer;
     public float episodeTime;
 
+    private void Awake() {
+        ExperimentController.OnExperimentStart += ExperimentController_OnExperimentStart;
+    }
+
     private void Start() {
         ResetEnvironment();
         EnvironmentAgent.OnEpisodeEnd += EnvironmentAgent_OnEpisodeEnd;
+    }
+
+    private void ExperimentController_OnExperimentStart() {
+        ExperimentController.Instance.Subscribe_EnvironmentCameraLocationList(this);
     }
 
     private void EnvironmentAgent_OnEpisodeEnd() {
