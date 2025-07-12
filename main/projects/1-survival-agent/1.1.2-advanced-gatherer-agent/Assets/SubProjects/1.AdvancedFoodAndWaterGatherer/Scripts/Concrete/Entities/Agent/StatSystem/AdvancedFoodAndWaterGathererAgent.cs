@@ -29,6 +29,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     [Header("Consume Logic")]
     [SerializeField] private IConsumable currentConsumable;
     [SerializeField] private bool isBiting;
+    [SerializeField] private bool canBite;
 
     [Header("Rewarding System")]
     public RewardingData rewardingData;
@@ -36,6 +37,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
 
     [Header("Timers")]
     [SerializeField] private float depletionTimer;
+    [SerializeField] private float biteCooldown;
 
     // Events
     public event Action OnEpisodeEnd;
@@ -63,9 +65,9 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         // Initialize state
         isAlive = true;
         isBiting = false;
+        canBite = true;
         depletionTimer = 0f;
 
-        Debug.Log($"Agent Initialized - Health: {Health.CurrentHealth}, Food: {Food.CurrentFood}, Water: {Water.CurrentWater}");
     }
 
     public override void OnEpisodeBegin() {
@@ -78,6 +80,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         depletionTimer = 0f;
         isAlive = true;
         isBiting = false;
+        canBite = true;
         currentConsumable = null;
 
         // Reset physics
@@ -86,7 +89,6 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
             rb.angularVelocity = Vector3.zero;
         }
 
-        Debug.Log($"Episode Begin - Health: {Health.CurrentHealth}, Food: {Food.CurrentFood}, Water: {Water.CurrentWater}");
     }
 
     public override void CollectObservations(VectorSensor sensor) {
@@ -96,6 +98,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         sensor.AddObservation(Water.GetPercentRatio());
 
         // Add action states
+        sensor.AddObservation(isBiting ? 1f : 0f);
         sensor.AddObservation(isBiting ? 1f : 0f);
         sensor.AddObservation(currentConsumable != null ? 1f : 0f);
 
@@ -108,13 +111,10 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     public override void OnActionReceived(ActionBuffers actions) {
         if (!isAlive) return;
 
-        Debug.Log("ONACTIONRECIVED");
         // Process actions
         Movement(actions);
         AgentTryConsume(actions);
 
-        // Update vital systems
-       //DepleteVitals();
 
         // Check death condition
         CheckDeathCondition();
@@ -139,7 +139,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
             return;
         }
 
-        
+
 
         // Deplete resources every second
         if (depletionTimer >= 1f) {
@@ -147,14 +147,13 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
             Food.ChangeFood(-foodDepletionRate);
             Water.ChangeWater(-waterDepletionRate);
 
-            Debug.Log($"Depleting - Food: {Food.CurrentFood}, Water: {Water.CurrentWater}");
 
             // Handle health logic
             if (Food.IsEmpty || Water.IsEmpty) {
                 if (Health.IsAlive) {
-                    
+
                     Health.ApplyDamage(healthDepletionRate);
-                    AddReward(rewardingData.NR_TakeDamage); 
+                    AddReward(rewardingData.NR_TakeDamage);
                 }
             }
             else if (Food.GetPercentRatio() >= foodPercentThreshold && Water.GetPercentRatio() >= waterPercentThreshold) {
@@ -181,22 +180,25 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     }
 
     private void AgentTryConsume(ActionBuffers actions) {
+        
         isBiting = false;
 
-        if (actions.DiscreteActions[0] == 1) {
+        if (actions.DiscreteActions[0] == 1 && canBite) {
             isBiting = true;
-            Debug.Log("Agent is biting!");
 
             if (currentConsumable != null) {
-                Debug.Log($"Consuming: {currentConsumable.GetType().Name}");
                 currentConsumable.Consume(this);
                 ConsumableEntity consumableEntity = currentConsumable as ConsumableEntity;
-                AddReward((consumableEntity.vitalAmount / 0.01f) * rewardingData.PR_SuccessfulConsumeMultiplier); 
+                AddReward((consumableEntity.vitalAmount * 0.01f) * rewardingData.PR_SuccessfulConsumeMultiplier);
+                currentConsumable = null;
             }
             else {
-                Debug.Log("Biting but no consumable nearby");
-                AddReward(rewardingData.NR_UnSuccessfulConsumeBase); // Small penalty for wasted action
+                AddReward(rewardingData.NR_UnSuccessfulConsumeBase);
+                currentConsumable = null;
             }
+
+            canBite = false;
+            biteCooldown = 3f;
         }
     }
 
@@ -214,7 +216,6 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.TryGetComponent<IConsumable>(out IConsumable consumable)) {
             currentConsumable = consumable;
-            Debug.Log($"Entered trigger with: {consumable.GetType().Name}");
         }
     }
 
@@ -222,17 +223,22 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         if (other.gameObject.TryGetComponent<IConsumable>(out IConsumable consumable)) {
             if (currentConsumable == consumable) {
                 currentConsumable = null;
-                Debug.Log($"Exited trigger with: {consumable.GetType().Name}");
             }
         }
     }
 
     private void FixedUpdate() {
         depletionTimer += Time.fixedDeltaTime;
-        DepleteVitals();
+        if (biteCooldown > 0) {
+            biteCooldown -= Time.fixedDeltaTime;   
+            canBite = false;
+        }
+        else {
+            canBite = true;
+        }
+            DepleteVitals();
     }
 }
 
 
 
-    

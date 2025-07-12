@@ -50,7 +50,6 @@ public class Health {
             OnHealthChanged?.Invoke(changeAmount);
         }
 
-        Debug.Log($"Health Added: {amount} -> Current: {CurrentHealth} (was {previousHealth})");
     }
 
     /// <summary>

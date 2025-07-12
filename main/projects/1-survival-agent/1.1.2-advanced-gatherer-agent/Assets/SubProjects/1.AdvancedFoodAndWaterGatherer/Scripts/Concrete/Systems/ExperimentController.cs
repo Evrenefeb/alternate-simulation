@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using TMPro;
 
 public class ExperimentController : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class ExperimentController : MonoBehaviour
     [SerializeField] private int numberOfEnvironements; 
 
     public static event Action OnExperimentStart;
+
+    [Header("Control")]
+    [SerializeField] private TMP_Text txt_EnvironmentIndex;
+    [SerializeField] private Transform allEnvironmentsCameraTransform;
 
     private void Awake() {
 
@@ -36,6 +41,7 @@ public class ExperimentController : MonoBehaviour
         OnExperimentStart?.Invoke();
         currentEnvironmentIndex = 0;
         numberOfEnvironements = EnvironmentCameraLocationList.Count;
+        Control();
     }
 
     public void Subscribe_EnvironmentCameraLocationList(EnvironmentController environmentController) {
@@ -43,14 +49,28 @@ public class ExperimentController : MonoBehaviour
     }
 
     private void Control() {
+        
+
         if (Input.GetKeyDown(KeyCode.X)) {
-            currentEnvironmentIndex++;
+            if (currentEnvironmentIndex == 0) return; 
+            currentEnvironmentIndex = (currentEnvironmentIndex + 1) % numberOfEnvironements;
+            ChangeCameraLocation(EnvironmentCameraLocationList[Mathf.Abs(currentEnvironmentIndex)]);
         }else if (Input.GetKeyDown(KeyCode.Z)) {
-            currentEnvironmentIndex--;
+            if (currentEnvironmentIndex == EnvironmentCameraLocationList.Count - 1) return;
+            currentEnvironmentIndex = (currentEnvironmentIndex - 1) % numberOfEnvironements;
+            ChangeCameraLocation(EnvironmentCameraLocationList[Mathf.Abs(currentEnvironmentIndex)]);
+        }else if (Input.GetKeyDown(KeyCode.Space)) {
+            ChangeCameraLocation(allEnvironmentsCameraTransform);
         }
-        Vector3 newCamLoc = EnvironmentCameraLocationList[Mathf.Abs(currentEnvironmentIndex % numberOfEnvironements)].position;
-        MainCamera.transform.position = newCamLoc;
+        
+        txt_EnvironmentIndex.text = $"Environment: {-currentEnvironmentIndex}";
     }
+
+    private void ChangeCameraLocation(Transform newCameraLocation) {
+        MainCamera.transform.position = newCameraLocation.position;
+    }
+
+    
 
     private void Update() {
         Control();

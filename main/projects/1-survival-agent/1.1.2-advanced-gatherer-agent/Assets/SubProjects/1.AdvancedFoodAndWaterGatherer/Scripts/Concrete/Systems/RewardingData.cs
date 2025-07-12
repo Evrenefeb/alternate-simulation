@@ -11,6 +11,6 @@ public class RewardingData : ScriptableObject
 
     [Header("Positive Rewards")]
     public float PR_HealthRegenerated;
-    [Range(0.5f, 2f)] public float PR_SuccessfulConsumeMultiplier;
+    [Range(5f, 15f)] public float PR_SuccessfulConsumeMultiplier;
     
 }

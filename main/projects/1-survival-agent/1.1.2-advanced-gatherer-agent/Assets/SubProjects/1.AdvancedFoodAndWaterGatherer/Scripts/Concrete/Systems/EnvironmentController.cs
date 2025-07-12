@@ -16,11 +16,19 @@ public class EnvironmentController : MonoBehaviour {
     public GameObject CampfirePrefab;
 
     [SerializeField] private TMP_Text txt_CumulativeReward;
+    [SerializeField] private TMP_Text txt_EpisodeTime;
 
-    private float episodeTimer;
+    [SerializeField] private float episodeTimer;
+
     public float episodeTime;
+    private float initialEpisodeTime;
+
+
+    [Header("Instances")]
+    [SerializeField] private List<GameObject> prefabInstanceList = new List<GameObject>();
 
     private void Awake() {
+        initialEpisodeTime = episodeTime;
         ExperimentController.OnExperimentStart += ExperimentController_OnExperimentStart;
     }
 
@@ -61,7 +69,9 @@ public class EnvironmentController : MonoBehaviour {
                 break;
         }
 
+        
         spawnedVolume.transform.SetParent(transform);
+        prefabInstanceList.Add(spawnedVolume);
     }
     private void SpawnFoodOrbs() {
 
@@ -77,24 +87,41 @@ public class EnvironmentController : MonoBehaviour {
             }
 
             FoodOrbs.Add(spawnedOrb);
+            prefabInstanceList.Add(spawnedOrb);
         }
     }
     private void SpawnCampfire() {
         Vector3 spawnLoc = new Vector3(Random.Range(-12, 12), 1f, Random.Range(-12, 12));
         GameObject spawnedCampfire = Instantiate(CampfirePrefab, transform.position + spawnLoc, Quaternion.identity);
         spawnedCampfire.transform.SetParent(transform);
+
+        prefabInstanceList.Add(spawnedCampfire);
     }
     private void ResetAgentPosition() {
         Vector3 center = new Vector3(transform.position.x, 1f, transform.position.z);
         EnvironmentAgent.transform.position = center;
     }
     private void ResetEnvironment() {
+        ClearInstances(prefabInstanceList);
         ResetAgentPosition();
         SpawnWaterVolume();
         SpawnFoodOrbs();
         SpawnCampfire();
+        episodeTimer = 0;
     }
+    private void ClearInstances(List<GameObject> instanceList) {
+        if (instanceList == null && FoodOrbs == null) return;
 
+        CleanUpFoodOrbs();
+        foreach (GameObject instance in instanceList) { 
+            Destroy(instance);
+        }
+
+        instanceList.Clear();
+    }
+    private void CleanUpFoodOrbs() {
+        FoodOrbs.RemoveAll(item => item == null);
+    }
     public void RespawnFoodOrb(GameObject foodOrb) {
         if(foodOrb != null) {
             Vector3 newSpawnLoc = new Vector3(Random.Range(-17,17), 0f, Random.Range(-17, 17));
@@ -108,9 +135,11 @@ public class EnvironmentController : MonoBehaviour {
         txt_CumulativeReward.text = EnvironmentAgent.GetCumulativeReward().ToString("F2");
 
         episodeTimer += Time.deltaTime;
+        txt_EpisodeTime.text = $"{episodeTimer.ToString("F2")}/{episodeTime.ToString("F2")}";
 
         if (episodeTimer > episodeTime) { 
-            EnvironmentAgent.EndEpisode(); 
+            EnvironmentAgent.EndEpisode();
+            ResetEnvironment();
         }
     }
 }

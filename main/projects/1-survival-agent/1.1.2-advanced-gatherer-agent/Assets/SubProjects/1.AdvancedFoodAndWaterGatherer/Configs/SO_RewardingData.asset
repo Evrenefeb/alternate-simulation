@@ -17,4 +17,4 @@ MonoBehaviour:
   NR_UnSuccessfulConsumeBase: -0.3
   NR_DeathPenalty: -50
   PR_HealthRegenerated: 0.2
-  PR_SuccessfulConsumeMultiplier: 1.5
+  PR_SuccessfulConsumeMultiplier: 10

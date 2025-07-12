@@ -56,7 +56,6 @@ public class Water {
         }
 
         // Debug logging
-        Debug.Log($"Water Change: {amount} -> Current: {CurrentWater} (was {previousWater})");
     }
 
     public float GetPercentRatio() {

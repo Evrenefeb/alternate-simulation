@@ -56,7 +56,6 @@ public class Food {
         }
 
         // Debug logging
-        Debug.Log($"Food Change: {amount} -> Current: {CurrentFood} (was {previousFood})");
     }
 
     public float GetPercentRatio() {

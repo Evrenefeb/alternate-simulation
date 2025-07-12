@@ -376,7 +376,10 @@ MonoBehaviour:
   WaterVolumePrefab: {fileID: 7671511799447190407, guid: e91bd32618948f34fb650a0fe2d01255, type: 3}
   CampfirePrefab: {fileID: 62616667454063202, guid: bb2373c33673ff44d81ed241434b5dfc, type: 3}
   txt_CumulativeReward: {fileID: 1085895488068304159}
-  episodeTime: 50
+  txt_EpisodeTime: {fileID: 1573403916621064637}
+  episodeTimer: 0
+  episodeTime: 180
+  prefabInstanceList: []
 --- !u!1 &5641003700330134779
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,6 +1063,30 @@ PrefabInstance:
       propertyPath: rewardingData
       value: 
       objectReference: {fileID: 11400000, guid: 13899195bf2bf3c49b6bc8207c75d05b, type: 2}
+    - target: {fileID: 4431398693184976862, guid: 578f143c853196445b16eee553d1df0e, type: 3}
+      propertyPath: initialMaxFood
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4431398693184976862, guid: 578f143c853196445b16eee553d1df0e, type: 3}
+      propertyPath: foodDepletionRate
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386218329833284699, guid: 578f143c853196445b16eee553d1df0e, type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386218329833284699, guid: 578f143c853196445b16eee553d1df0e, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6964134403278293946, guid: 578f143c853196445b16eee553d1df0e, type: 3}
+      propertyPath: m_Height
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6964134403278293946, guid: 578f143c853196445b16eee553d1df0e, type: 3}
+      propertyPath: m_Direction
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8105495295212817042, guid: 578f143c853196445b16eee553d1df0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

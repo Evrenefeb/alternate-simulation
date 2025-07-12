@@ -1,0 +1,96 @@
+# trainer_config.yaml for SimpleFoodAndWaterGathererWithStamina Agent
+
+# This section defines the settings for each behavior in your Unity project.
+# The key here (SimpleFoodAndWaterGathererWithStamina) MUST exactly match
+# the "Behavior Name" field on your Agent's Behavior Parameters component in Unity.
+behaviors:
+  SimpleFoodAndWaterGathererWithStamina:
+    # Trainer type: Proximal Policy Optimization (PPO) is a robust and widely used algorithm.
+    trainer_type: ppo
+
+    # Hyperparameters for the PPO algorithm. These control the learning process.
+    hyperparameters:
+      # Batch size: Number of experiences sampled from the buffer to train the network.
+      # Larger batch sizes can lead to more stable updates.
+      batch_size: 2048 # Increased for high-end PC
+      # Buffer size: How many experiences are collected before training updates the network.
+      # Larger buffer sizes provide more diverse data for learning.
+      buffer_size: 20480 # Increased for high-end PC
+      # Learning rate: How quickly the model's weights are updated during training.
+      learning_rate: 0.0003
+      # Beta (entropy regularization): Encourages exploration by penalizing overly confident actions.
+      # A slightly higher value can help with initial exploration in complex environments.
+      beta: 0.006
+      # Epsilon (PPO clipping parameter): Limits how much the policy can change in one update step.
+      epsilon: 0.2
+      # Lambda (GAE lambda): Controls the balance between bias and variance in advantage estimation.
+      lambd: 0.95
+      # Number of epochs: How many times the collected data is iterated over during training.
+      num_epoch: 3
+      # Learning rate schedule: How the learning rate changes over time.
+      # 'linear' decays it linearly to zero, which can help with convergence.
+      learning_rate_schedule: linear
+
+    # Network settings: Defines the architecture of the neural network.
+    network_settings:
+      # Hidden units: Number of neurons in each hidden layer.
+      # More units allow for learning more complex relationships.
+      hidden_units: 256 # Increased for high-end PC and potentially complex survival logic
+      # Number of layers: Depth of the neural network.
+      num_layers: 3 # Increased for potentially better feature extraction
+      # Normalize observations: Scales observations to a range (usually 0-1 or -1 to 1).
+      # This is almost always recommended for stable training.
+      normalize: True
+      # Visual encoder type: How visual observations (if any) are processed.
+      # 'simple' is for vector observations only. If you add camera sensors, this would change.
+      vis_encode_type: simple
+      # Memory: Set to 'None' unless you're using recurrent neural networks (LSTMs) for memory.
+      memory: None
+
+    # Reward signals: Defines how the agent receives rewards.
+    reward_signals:
+      # Extrinsic reward: Rewards received directly from the environment (your AddReward calls).
+      extrinsic:
+        # Gamma (discount factor): Determines the importance of future rewards.
+        # 0.99 is common for long-term tasks like survival.
+        gamma: 0.99
+        # Strength: Multiplier for extrinsic rewards.
+        strength: 1.0
+      # Intrinsic Curiosity Module (ICM): Encourages exploration by rewarding novel states.
+      # This can be very helpful for survival tasks where initial rewards might be sparse.
+      curiosity:
+        strength: 0.02 # Adjust this value (e.g., 0.01 to 0.05) to control curiosity's impact
+        gamma: 0.99
+        encoding_size: 256 # Size of the encoding layer for curiosity
+        learning_rate: 0.0003 # Learning rate for the curiosity module's network
+
+    # Training parameters: Global settings for the training process.
+    init_path: None # Set to 'None' for new training, or specify a path to resume from a specific model.
+    # Keep checkpoints: Number of model checkpoints to save.
+    keep_checkpoints: 10
+    # Even checkpoints: If True, checkpoints are saved at even intervals based on max_steps.
+    even_checkpoints: False
+    # Max steps: Total number of simulation steps before training terminates.
+    # Set to a very large number for effectively "infinite" training.
+    # 1 MLAgent Step = 0.001 Seconds
+    
+    # Example Conversions:
+    # 1 Second = 1000 Step
+    # 30 Seconds = 30 000 Step
+    # 60 Seconds = 1 Minute = 60 000 Step
+    # 5 Minutes = 300 000 Step
+    # 60 Minutes = 1 Hour =  3 600 000 Step
+    # 5 Hours = 18 000 000 Step
+    
+    max_steps: 1000000000 # 1 Billion steps - adjust as needed, but this is a good start.
+    # Time horizon: How many steps of experience are collected before a value estimate is used.
+    time_horizon: 128 # Increased for potentially longer sequences of actions
+    # Summary frequency: How often TensorBoard summaries are saved (in steps).
+    summary_freq: 50000
+    # Threaded: If True, allows data collection and model updates to happen concurrently.
+    # Good for high-end PCs with multiple cores.
+    threaded: True
+    # Self-play: Not needed for a single agent survival game.
+    self_play: None
+    # Behavioral cloning: Not needed unless you're using demonstrations.
+    behavioral_cloning: None
