@@ -15,6 +15,7 @@ MonoBehaviour:
   NR_Idle: -0.001
   NR_TakeDamage: -0.5
   NR_UnSuccessfulConsumeBase: -0.3
-  NR_DeathPenalty: -50
+  NR_DeathPenalty: -100
+  NR_RepetativeConsumptionPenalty: -1
   PR_HealthRegenerated: 0.2
   PR_SuccessfulConsumeMultiplier: 10

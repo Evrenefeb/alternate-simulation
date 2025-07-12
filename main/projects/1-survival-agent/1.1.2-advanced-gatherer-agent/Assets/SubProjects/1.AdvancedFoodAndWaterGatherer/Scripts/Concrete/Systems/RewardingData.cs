@@ -8,6 +8,7 @@ public class RewardingData : ScriptableObject
     public float NR_TakeDamage;
     public float NR_UnSuccessfulConsumeBase;
     public float NR_DeathPenalty;
+    public float NR_RepetativeConsumptionPenalty;
 
     [Header("Positive Rewards")]
     public float PR_HealthRegenerated;

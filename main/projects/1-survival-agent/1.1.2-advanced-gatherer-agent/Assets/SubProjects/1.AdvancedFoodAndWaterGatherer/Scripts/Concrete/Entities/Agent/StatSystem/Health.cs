@@ -73,7 +73,6 @@ public class Health {
             }
         }
 
-        Debug.Log($"Health Damage: {damage} -> Current: {CurrentHealth} (was {previousHealth})");
     }
 
     public float GetPercentRatio() {

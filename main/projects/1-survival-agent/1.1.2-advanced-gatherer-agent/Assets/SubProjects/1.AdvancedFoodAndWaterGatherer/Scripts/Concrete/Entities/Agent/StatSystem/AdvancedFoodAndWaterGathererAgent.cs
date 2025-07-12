@@ -38,6 +38,10 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
     [Header("Timers")]
     [SerializeField] private float depletionTimer;
     [SerializeField] private float biteCooldown;
+    [SerializeField] private float repetativeConsumptionTimer;
+
+    [Header("RepetativeConsumptions")]
+    [SerializeField] private int repetativeConsumptionAmount; 
 
     // Events
     public event Action OnEpisodeEnd;
@@ -67,7 +71,8 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         isBiting = false;
         canBite = true;
         depletionTimer = 0f;
-
+        repetativeConsumptionTimer = 0f;
+        repetativeConsumptionAmount = 0;
     }
 
     public override void OnEpisodeBegin() {
@@ -82,6 +87,8 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         isBiting = false;
         canBite = true;
         currentConsumable = null;
+        repetativeConsumptionTimer = 0f;
+        repetativeConsumptionAmount = 0;
 
         // Reset physics
         if (rb != null) {
@@ -106,6 +113,8 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         sensor.AddObservation(transform.localPosition.x);
         sensor.AddObservation(transform.localPosition.z);
         sensor.AddObservation(transform.rotation.y);
+
+        sensor.AddObservation(repetativeConsumptionAmount);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
@@ -118,9 +127,25 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
 
         // Check death condition
         CheckDeathCondition();
+        CheckRepetativeConsumption();
 
         // Small penalty for time to encourage efficiency
         AddReward(rewardingData.NR_Idle);
+    }
+
+    private void CheckRepetativeConsumption() {
+        repetativeConsumptionTimer += Time.fixedDeltaTime;
+
+        if(repetativeConsumptionTimer > 30f) {
+            repetativeConsumptionTimer = 0f;
+            repetativeConsumptionAmount = 0;
+        }
+        else {
+            if (repetativeConsumptionAmount > 4) {
+                AddReward(rewardingData.NR_RepetativeConsumptionPenalty);
+                repetativeConsumptionAmount--;
+            }
+        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut) {
@@ -141,9 +166,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
 
 
 
-        // Deplete resources every second
         if (depletionTimer >= 1f) {
-            // Deplete food and water
             Food.ChangeFood(-foodDepletionRate);
             Water.ChangeWater(-waterDepletionRate);
 
@@ -191,6 +214,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
                 ConsumableEntity consumableEntity = currentConsumable as ConsumableEntity;
                 AddReward((consumableEntity.vitalAmount * 0.01f) * rewardingData.PR_SuccessfulConsumeMultiplier);
                 currentConsumable = null;
+                repetativeConsumptionAmount++;
             }
             else {
                 AddReward(rewardingData.NR_UnSuccessfulConsumeBase);
@@ -206,7 +230,7 @@ public class AdvancedFoodAndWaterGathererAgent : Agent {
         if (!Health.IsAlive && isAlive) {
             isAlive = false;
             Debug.Log("Agent died!");
-            AddReward(rewardingData.NR_DeathPenalty); // Large penalty for death
+            SetReward(rewardingData.NR_DeathPenalty); // Set To Minimum
             OnEpisodeEnd?.Invoke();
             EndEpisode();
         }

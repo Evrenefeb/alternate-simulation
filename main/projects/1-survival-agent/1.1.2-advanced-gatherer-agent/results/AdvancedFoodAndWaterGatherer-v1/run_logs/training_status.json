@@ -1,0 +1,65 @@
+{
+    "AdvancedFoodAndWaterGathererBehavior": {
+        "checkpoints": [
+            {
+                "steps": 1499985,
+                "file_path": "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-1499985.onnx",
+                "reward": -69.4265134392246,
+                "creation_time": 1752324447.239324,
+                "auxillary_file_paths": [
+                    "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-1499985.pt"
+                ]
+            },
+            {
+                "steps": 1999959,
+                "file_path": "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-1999959.onnx",
+                "reward": -72.33771120224681,
+                "creation_time": 1752324675.8725724,
+                "auxillary_file_paths": [
+                    "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-1999959.pt"
+                ]
+            },
+            {
+                "steps": 2499939,
+                "file_path": "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-2499939.onnx",
+                "reward": -59.176332961945306,
+                "creation_time": 1752324905.8328853,
+                "auxillary_file_paths": [
+                    "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-2499939.pt"
+                ]
+            },
+            {
+                "steps": 2999954,
+                "file_path": "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-2999954.onnx",
+                "reward": -28.63426076070122,
+                "creation_time": 1752325137.3214798,
+                "auxillary_file_paths": [
+                    "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-2999954.pt"
+                ]
+            },
+            {
+                "steps": 3106719,
+                "file_path": "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-3106719.onnx",
+                "reward": null,
+                "creation_time": 1752325251.828646,
+                "auxillary_file_paths": [
+                    "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-3106719.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3106719,
+            "file_path": "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior.onnx",
+            "reward": null,
+            "creation_time": 1752325251.828646,
+            "auxillary_file_paths": [
+                "results\\AdvancedFoodAndWaterGatherer-v1\\AdvancedFoodAndWaterGathererBehavior\\AdvancedFoodAndWaterGathererBehavior-3106719.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
