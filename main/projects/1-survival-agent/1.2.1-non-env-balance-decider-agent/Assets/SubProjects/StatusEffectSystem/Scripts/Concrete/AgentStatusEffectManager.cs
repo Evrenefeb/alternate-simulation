@@ -12,7 +12,7 @@ public class AgentStatusEffectManager : MonoBehaviour {
     private AgentStats _agentStats;
 
     // Unity Methods
-    private void Start() {
+    protected virtual void Start() {
         _agentStats = GetComponent<AgentStats>();
         _activeEffects = new List<BaseStatusEffectLogic>();
     }

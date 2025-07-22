@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7aff82e2056b8a4b9d8c189d96a908d, type: 3}
-  m_Name: Initial Stats
+  m_Script: {fileID: 11500000, guid: 65a7e28bb643b4b48bb60aa77acafaac, type: 3}
+  m_Name: AgentTooHotStatusEffectData
   m_EditorClassIdentifier: 
-  initialMaxTemperature: 45
-  initialMinTemperature: -30
-  optimumTemprature: 17
-  initialMaxMovementStep: 0.05
+  ID: 0
+  EffectName: Too Hot
+  Description: Temprature will increase significantly
+  Duration: 5
+  EffectType: 2
+  RewardPerTick: -1
+  tempratureIncrementPerTick: 1

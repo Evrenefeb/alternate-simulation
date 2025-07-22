@@ -23,7 +23,10 @@ public abstract class BaseStat : IStat {
             return _maxValue;
         }
         set {
-            if (value < 0) value = 0;
+            if (value < MinValue) value = MinValue;
+            if (value < _maxValue && value > CurrentValue) {
+                CurrentValue = value;
+            }
             _maxValue = value;
         }
     }

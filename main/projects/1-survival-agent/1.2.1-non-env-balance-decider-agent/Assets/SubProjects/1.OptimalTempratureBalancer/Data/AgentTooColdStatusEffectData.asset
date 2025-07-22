@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7aff82e2056b8a4b9d8c189d96a908d, type: 3}
-  m_Name: Initial Stats
+  m_Script: {fileID: 11500000, guid: 20a634aaa7abf464291edee162e4c015, type: 3}
+  m_Name: AgentTooColdStatusEffectData
   m_EditorClassIdentifier: 
-  initialMaxTemperature: 45
-  initialMinTemperature: -30
-  optimumTemprature: 17
-  initialMaxMovementStep: 0.05
+  ID: 1
+  EffectName: Too Cold
+  Description: Temprature will decrease significantly
+  Duration: 5
+  EffectType: 2
+  RewardPerTick: -1
+  tempratureDecrementPerTick: 1

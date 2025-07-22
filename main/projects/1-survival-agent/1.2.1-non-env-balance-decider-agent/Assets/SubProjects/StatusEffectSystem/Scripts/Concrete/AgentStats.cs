@@ -34,4 +34,15 @@ public class AgentStats : MonoBehaviour
         }
         
     }
+
+    // Public Methods
+    public virtual void ResetStats() {
+        Health = null;
+        Food = null;
+        MovementSpeed = null;
+
+        Health = new Health(initialMaxHealth);
+        Food = new Food(initialMaxFood);
+        MovementSpeed = new MovementSpeed(initialMaxMS);
+    }
 }
